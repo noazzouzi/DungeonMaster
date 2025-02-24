@@ -49,15 +49,15 @@ def startZone(zoneName):
     with open("config/zone/" + zoneName + ".json", "r", encoding="utf-8") as file:
         config = json.load(file)
         
-    monsters = config["monsters"]
+    monsters = config["monsterNames"]
     iteration = 0
     current_map = 0
     start_map = config["start_map"]
     print("Deplacement vers Map de départ: " + str(start_map))
     travel.travel(start_map)
     while True:
-        detect_monster.find_and_click_monsters(monsters)
-        time.sleep(0.75)
+        detect_monster.click_box(monsters)
+        time.sleep(0.5)
         iteration = iteration + 1
         print("iteration " + str(iteration))
         if iteration > 3:
