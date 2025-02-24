@@ -1,0 +1,21 @@
+{
+    "enter_dungeon": {
+        "npc_pos": [1731, 497],
+        "dialogue_pos": [1927, 557],
+        "key_pos": [1927, 557]
+    },
+
+    "leave_dungeon": {
+        "npc_pos": [1959, 497],
+        "dialogue_pos": [2157, 557],
+        "key_pos": null
+    },
+
+    "monsters": {
+        "room1": "images/kwakwa/eau",
+        "room2": "images/kwakwa/vent",
+        "room3": "images/kwakwa/terre",
+        "room4": "images/kwakwa/feu",
+        "boss": "images/kwakwa/boss"
+    }
+}
