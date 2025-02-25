@@ -2,5 +2,19 @@
     "monsters": "images/topaze/",
     "start_map": "-15,-60",
     "maps": ["-14,-60", "-13,-60", "-12,-60", "-11,-60", "-11,-61", "-11,-62", "-12,-62", "-13,-62", "-14,-62"],
-    "monsterNames": ["Buveur", "Corbac", "Corbac Apprivoisé", "Renarbo"]
+    "monsterNames": ["Buveur", "Corbac", "Renarbo"],
+    "specialMonsters": ["Corbac"],
+    "positions": ["right", "down", "left", "up"],
+    "monsterColors": {
+        "Buveur": ["#FADB97"],
+        "Renarbo": ["#FE8620"],
+        "Corbac": ["#2D2B22"]
+      },
+      "mapDirections": {
+        "Right": 2,
+        "Left": 1,
+        "Up": 8,
+        "Down": 5
+      },
+      "acceptedMonsters": ["Buveur", "Renarbo"]
 }

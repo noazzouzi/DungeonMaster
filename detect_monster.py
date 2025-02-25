@@ -98,7 +98,7 @@ def click_box(monsterNames):
     # Si la boîte est bien détectée, cliquer en bas
     if box_top is not None and box_bottom is not None:
         print("click : " + str(vertical) + ", " + str(box_bottom + 500))
-        click_x = vertical + 10  # Utiliser la position X du bouton
+        click_x = vertical  # Utiliser la position X du bouton
         click_y = box_bottom + 50  # Ajouter un petit décalage pour cliquer sous la boîte
 
         pyautogui.mouseDown(click_x, click_y)

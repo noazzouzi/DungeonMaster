@@ -62,7 +62,7 @@ def startZone(zoneName):
         print("iteration " + str(iteration))
         if iteration > 3:
                 print("Map completed, to the next!")
-                travel.travel(config["maps"][current_map])
+                travel.travelTo(config["positions"][current_map])
                 current_map = current_map + 1
                 iteration = 0
                 if current_map == len(config["maps"]):

@@ -20,3 +20,18 @@ def travel(map):
     time.sleep(0.5)  # Attendre 0.5 seconde
     keyboard.press_and_release('enter')  # Deuxième appui
     time.sleep(10)
+
+def move(pos):
+    print("going " + str(pos))
+    keyboard.press(pos)
+    time.sleep(0.5)
+    keyboard.release(pos)
+
+
+def travelTo(pos):
+    print("moving to : -> " + str(pos))
+    match pos:
+        case 'up': move('8')
+        case 'down': move('5')
+        case 'right': move('2')
+        case 'left': move('1')

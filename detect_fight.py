@@ -16,6 +16,6 @@ def is_combat_ready(spellbar_image_path):
 
     print("Recherche barre de sorts...")
     # Retourner vrai si la barre de sorts est détectée
-    spellbar = max_val > 0.5
+    spellbar = max_val > 0.4
     print("Spellbar found : " + str(spellbar))
     return spellbar
