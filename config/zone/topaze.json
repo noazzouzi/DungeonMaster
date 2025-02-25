@@ -10,11 +10,5 @@
         "Renarbo": ["#FE8620"],
         "Corbac": ["#2D2B22"]
       },
-      "mapDirections": {
-        "Right": 2,
-        "Left": 1,
-        "Up": 8,
-        "Down": 5
-      },
-      "acceptedMonsters": ["Buveur", "Renarbo"]
+      "acceptedMonsters": ["Buveur", "Renarbo", "Corbac", "Corbac Apprivoisé"]
 }

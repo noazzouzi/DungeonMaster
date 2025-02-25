@@ -6,6 +6,7 @@ import numpy as np
 import pyautogui
 import keyboard
 import pytesseract
+import window
 
 # Charger la configuration
 with open("config/zone/topaze.json", "r") as file:
@@ -18,7 +19,7 @@ total_attempts = 0
 stop_script = False
 
 # Liste des directions à suivre pour changer de map
-directions_list = list(config["mapDirections"])
+directions_list = list(config["positions"])
 direction_index = 0  # Pour suivre l'indice dans la liste
 
 def capture_screen():
@@ -58,16 +59,17 @@ def read_monster_text():
     # Capturer une petite zone autour du monstre pour lire le texte
     # Les coordonnées peuvent être ajustées en fonction de la position du texte affiché
     screen_width, screen_height = pyautogui.size()
-    capture_width = 200  # Ajuster cette largeur en fonction de la taille du texte
-    capture_height = 50  # Hauteur pour capturer le texte affiché
+    capture_width = 1200  # Ajuster cette largeur en fonction de la taille du texte
+    capture_height = 1000  # Hauteur pour capturer le texte affiché
 
-    # Calculer les coordonnées du coin supérieur gauche pour la zone (ajustée autour du monstre)
+    # Calcul des coordonnées du coin supérieur gauche pour la zone
     start_x = (screen_width - capture_width) // 2
-    start_y = screen_height - capture_height - 50  # Ajuster pour capturer la zone du texte
+    start_y = (screen_height - capture_height) // 2 - 100  # Décalage vers le haut pour capturer plus du haut
 
     # Capture de la zone autour du monstre
     screenshot = pyautogui.screenshot(region=(start_x, start_y, capture_width, capture_height))
     screenshot_np = np.array(screenshot)
+    screenshot.save("screenshot_text.png")
 
     # Utilisation de pytesseract pour extraire le texte de l'image
     text = pytesseract.image_to_string(screenshot_np)
@@ -178,6 +180,9 @@ def main():
     global total_attempts, stop_script
     keyboard.add_hotkey("F2", stop_script_callback)
     
+    with open("config/config.json", "r") as file:
+        conf = json.load(file)
+    window.window(conf["character_name"])
     while not stop_script:
         # Vérifier si un combat est lancé
         if detect_combat():
