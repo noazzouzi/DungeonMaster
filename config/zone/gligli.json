@@ -1,6 +1,15 @@
 {
     "monsters": "images/gligli/",
-    "start_map": "-3,-45",
+    "start_map": "-5,-47",
     "maps": ["-2,-45", "-1,-45", "0,-45", "1,-45", "2,-45", "2,-46", "2,-47", "2,-48", "1,-48", "0,-48", "-1,-48", "-2,-48"],
-    "monsterNames": ["Gligli", "Gliglibido", "Gliglidoudur", "Gliglitch", "Gliglicérin"]
+    "monsterNames": ["Gligli", "Gliglibido", "Gliglidoudur", "Gliglitch", "Gliglicérin"],
+    "positions": ["right", "right", "right", "right", "right", "right", "right", "right", "left", "left", "left", "left", "left", "left", "left", "left"],
+    "monsterColors": {
+        "Gliglitch": ["#9F5208", "#AA5808", "#4F2408"],
+        "Gliglibido": ["#FEFEFE"],
+        "Gligligoudur": ["#D0BA83", "#D8AE84"],
+        "Gliglicerin": ["#802021", "#384852", "#BF6B41"]
+      },
+      "acceptedMonsters": ["Gliglitch", "Gliglibido", "Gligligoudur", "Gliglicerin", "Glitch", "libido", "goudur", "glicerin", "itch", "bido", "udur", "cerin"],
+      "allowedMaps": ["Landes de Cania", "landes"]
 }

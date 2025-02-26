@@ -8,9 +8,11 @@ import keyboard
 import pytesseract
 import window
 import difflib
+import sys
 
 # Charger la configuration
-with open("config/zone/topaze.json", "r", encoding="utf-8") as file:
+input = sys.argv[1]
+with open("config/zone/" + input + ".json", "r", encoding="utf-8") as file:
     config = json.load(file)
 
 monster_colors = config["monsterColors"]
@@ -97,7 +99,7 @@ def click_on_monster():
 
         # Déplacer la souris sur le monstre sans cliquer pour afficher le texte
         pyautogui.moveTo(x, y)
-        time.sleep(0.1)
+        time.sleep(0.2)
 
         # Lire le texte affiché (à adapter selon l'outil ou la méthode de capture de texte)
         monster_text = read_monster_text()
@@ -195,7 +197,7 @@ def check_map_validity():
     current_map = get_current_map(allowed_maps)
     print("maps autorisés : " + str(allowed_maps))
     print("current map : "  + str(current_map))
-    if current_map not in allowed_maps:
+    if all(allowed_map.lower() not in current_map.lower() for allowed_map in allowed_maps):
         print(f"Map inconnue ({current_map}), retour à la map de départ.")
         return_to_start()
 
@@ -215,7 +217,16 @@ def travel(map):
     keyboard.press_and_release('enter')  # Premier appui
     time.sleep(0.5)  # Attendre 0.5 seconde
     keyboard.press_and_release('enter')  # Deuxième appui
-    time.sleep(10)
+    time.sleep(30)
+    # Obtenir la taille de l'écran
+    screen_width, screen_height = pyautogui.size()
+    center_x, center_y = screen_width // 2, screen_height // 2
+
+    # Clic au centre de l'écran
+    pyautogui.moveTo(center_x, center_y)
+    pyautogui.mouseDown()
+    time.sleep(0.25)
+    pyautogui.mouseUp()
 
 def return_to_start():
     """Effectue une série de déplacements pour revenir à la map initiale."""
@@ -237,7 +248,7 @@ def change_map():
     direction = directions_list[direction_index]
     key = map_direction(direction)
     keyboard.press_and_release(str(key))
-    time.sleep(2)
+    time.sleep(5)
 
     # Mettre à jour l'index pour la prochaine direction
     direction_index = (direction_index + 1) % len(directions_list)  # Revenir à 0 si on atteint la fin de la liste

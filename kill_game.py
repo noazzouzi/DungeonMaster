@@ -15,3 +15,7 @@ def kill_game():
                     print(f"Processus " + str(p) + " fermé : PID {process.info['pid']}")
                 except Exception as e:
                     print(f"Erreur en fermant " + p + " : {e}")
+
+
+
+kill_game()
