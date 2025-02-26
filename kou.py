@@ -7,9 +7,10 @@ import pyautogui
 import keyboard
 import pytesseract
 import window
+import difflib
 
 # Charger la configuration
-with open("config/zone/topaze.json", "r") as file:
+with open("config/zone/topaze.json", "r", encoding="utf-8") as file:
     config = json.load(file)
 
 monster_colors = config["monsterColors"]
@@ -133,7 +134,6 @@ def capture_screen_for_combat():
 
     # Capture d'écran dans la zone réduite
     screenshot = pyautogui.screenshot(region=(start_x, start_y, capture_width, capture_height))
-    screenshot.save("screenshot_combat.png")  # Sauvegarder la capture pour vérification
     return cv2.cvtColor(np.array(screenshot), cv2.COLOR_RGB2BGR)
 
 
@@ -151,6 +151,77 @@ def detect_combat():
 
     # Si des correspondances sont trouvées, cela signifie qu'un combat est lancé
     return len(locations[0]) > 0
+
+def correct_map_name(detected_name, allowed_maps):
+    """Corrige le nom de la map détectée en trouvant la plus proche dans la liste des maps valides."""
+    closest_match = difflib.get_close_matches(detected_name, allowed_maps, n=1, cutoff=0.6)
+    return closest_match[0] if closest_match else detected_name
+
+def get_current_map(allowed_maps):
+    """Utilise OCR pour lire le nom de la map en haut à gauche de l'écran avec amélioration de l'image."""
+    screen_width, screen_height = pyautogui.size()
+
+    # Capturer une petite zone en haut à gauche pour obtenir le nom de la map
+    capture_width = 500  
+    capture_height = 50  
+    start_x = 10  
+    start_y = 70  
+
+    # Capture d'écran
+    screenshot = pyautogui.screenshot(region=(start_x, start_y, capture_width, capture_height))
+    screenshot_np = np.array(screenshot)
+    screenshot.save("current_map.png")
+
+    # Conversion en niveaux de gris
+    gray = cv2.cvtColor(screenshot_np, cv2.COLOR_RGB2GRAY)
+
+    # Appliquer un seuillage adaptatif pour améliorer le contraste
+    processed = cv2.adaptiveThreshold(gray, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 11, 2)
+
+    # Sauvegarder l'image pour debug (optionnel)
+    cv2.imwrite("screenshot_map_processed.png", processed)
+
+    # OCR
+    map_text = pytesseract.image_to_string(processed, config="--psm 7").strip()
+    map_text = correct_map_name(map_text, allowed_maps)
+
+    return map_text
+
+
+
+def check_map_validity():
+    """Vérifie si la map actuelle est autorisée, sinon retourne à la position de départ."""
+    allowed_maps = config["allowedMaps"]
+    current_map = get_current_map(allowed_maps)
+    print("maps autorisés : " + str(allowed_maps))
+    print("current map : "  + str(current_map))
+    if current_map not in allowed_maps:
+        print(f"Map inconnue ({current_map}), retour à la map de départ.")
+        return_to_start()
+
+def travel(map):
+    with open("config/config.json", "r", encoding="utf-8") as file:
+        conf = json.load(file)
+
+    chat = conf["chat"]
+
+    time.sleep(1)
+    pyautogui.mouseDown(chat)
+    time.sleep(0.2)
+    pyautogui.mouseUp(chat)
+    time.sleep(0.5)
+    keyboard.write("/travel " + map)
+    time.sleep(0.5)
+    keyboard.press_and_release('enter')  # Premier appui
+    time.sleep(0.5)  # Attendre 0.5 seconde
+    keyboard.press_and_release('enter')  # Deuxième appui
+    time.sleep(10)
+
+def return_to_start():
+    """Effectue une série de déplacements pour revenir à la map initiale."""
+    start_path = config["start_map"]  # Une liste d'actions pour retourner (ex: ["left", "up", "right"])
+    travel(start_path)
+    print("Retour à la map de départ terminé.")
 
 def map_direction(direction):
     print("Moving " + str(direction).lower() + " !")
@@ -184,6 +255,7 @@ def main():
         conf = json.load(file)
     window.window(conf["character_name"])
     while not stop_script:
+        check_map_validity()
         # Vérifier si un combat est lancé
         if detect_combat():
             print("Combat détecté ! Le script est en pause...")
